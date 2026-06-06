@@ -1225,15 +1225,7 @@
           mapFrame.src = `https://www.google.com/maps?q=${zip}&output=embed`;
         }
 
-        // &#9989; Send to FormPress
-        try {
-          await fetch("https://formspree.io/f/meolzlll", {
-            method: "POST",
-            body: formData,
-          });
-        } catch (error) {
-          console.error("Error submitting to FormPress:", error);
-        }
+        
 
         // &#9989; Hide form + show confirmation section
         form.classList.add("hidden");
@@ -1511,28 +1503,30 @@
                   btn.disabled = true;
                   btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i> Sending…';
                   var data = new FormData(this);
-                  var ghlPayload = {
-                    first_name: data.get('first_name') || '',
-                    last_name: data.get('last_name') || '',
-                    phone: data.get('phone') || '',
-                    email: data.get('email') || '',
-                    state: data.get('state') || '',
-                    city: data.get('city') || '',
-                    full_name: (data.get('first_name') || '') + ' ' + (data.get('last_name') || ''),
-                    source: 'Hero Form - Zoiris Cleaning Services Website'
-                  };
+                  var formPayload = new URLSearchParams();
+                  formPayload.append('service_id', '15d55296-a241-494a-b6f8-d36fd4a36e39');
+                  formPayload.append('form_name', 'Zoiris Cleaning services');
+                  formPayload.append('firstName', data.get('first_name') || '');
+                  formPayload.append('lastName', data.get('last_name') || '');
+                  formPayload.append('phone', data.get('phone') || '');
+                  formPayload.append('email', data.get('email') || '');
+                  formPayload.append('complianceSMS', data.get('consent_nonmarketing') ? 'on' : 'off');
+                  formPayload.append('compliancePromo', data.get('consent_marketing') ? 'on' : 'off');
+                  if (data.get('state')) formPayload.append('state', data.get('state'));
+                  if (data.get('city')) formPayload.append('city', data.get('city'));
+                  
                   try {
-                    const [formspree] = await Promise.all([
-                      fetch('https://formspree.io/f/meolzlll', { method: 'POST', body: data, headers: { 'Accept': 'application/json' } }),
-                      fetch('https://services.leadconnectorhq.com/hooks/MpbUmdHRCJjL5urxlQWn/webhook-trigger/c78e3c57-3802-40cb-a7bb-46050ee2af4d', { method: 'POST', body: JSON.stringify(ghlPayload), headers: { 'Content-Type': 'application/json' } })
-                    ]);
-                    if (formspree.ok) { this.style.display = 'none'; document.getElementById('heroCallSuccess').style.display = 'block'; }
-                    else { throw new Error(); }
-                  } catch {
-                    document.getElementById('heroCallError').style.display = 'block';
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-phone-alt" style="margin-right:8px;"></i> Call Me &mdash; I\'m Ready!';
+                    await fetch('https://www.truewebx.site/api/lead/submit', {
+                      method: 'POST',
+                      body: formPayload,
+                      headers: { 'Accept': 'application/json' }
+                    });
+                  } catch (error) {
+                    console.error("Error submitting to TrueWebX:", error);
                   }
+                  
+                  this.style.display = 'none';
+                  document.getElementById('heroCallSuccess').style.display = 'block';
                 });
               })();
             </script>
@@ -2731,37 +2725,36 @@
           const btn = document.getElementById("zcsSubmitBtn");
           btn.disabled = true;
           btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i> Sending…';
-          const data = new FormData(form);
-          const ghlPayload = {
-            first_name: data.get('first_name') || '',
-            last_name: data.get('last_name') || '',
-            phone: data.get('phone') || '',
-            email: data.get('email') || '',
-            address: data.get('address') || '',
-            city: data.get('city') || '',
-            state: data.get('state') || '',
-            service_type: data.get('service_type') || '',
-            message: data.get('message') || '',
-            full_name: (data.get('first_name') || '') + ' ' + (data.get('last_name') || ''),
-            source: 'Quote Form - Zoiris Cleaning Services Website'
-          };
+          var data = new FormData(form);
+          var formPayload = new URLSearchParams();
+          formPayload.append('service_id', '15d55296-a241-494a-b6f8-d36fd4a36e39');
+          formPayload.append('form_name', 'Zoiris Cleaning services');
+          formPayload.append('firstName', data.get('first_name') || '');
+          formPayload.append('lastName', data.get('last_name') || '');
+          formPayload.append('phone', data.get('phone') || '');
+          formPayload.append('email', data.get('email') || '');
+          formPayload.append('complianceSMS', data.get('consent_nonmarketing') ? 'on' : 'off');
+          formPayload.append('compliancePromo', data.get('consent_marketing') ? 'on' : 'off');
+          if (data.get('address')) formPayload.append('address', data.get('address'));
+          if (data.get('city')) formPayload.append('city', data.get('city'));
+          if (data.get('state')) formPayload.append('state', data.get('state'));
+          if (data.get('service_type')) formPayload.append('service_type', data.get('service_type'));
+          if (data.get('message')) formPayload.append('message', data.get('message'));
+
           try {
-            const [formspree, ghl] = await Promise.all([
-              fetch("https://formspree.io/f/xkgvorgd", { method: "POST", body: data, headers: { "Accept": "application/json" } }),
-              fetch("https://services.leadconnectorhq.com/hooks/MpbUmdHRCJjL5urxlQWn/webhook-trigger/2fc8a295-4595-48ba-a780-9c5ebca1e6f1", { method: "POST", body: JSON.stringify(ghlPayload), headers: { "Content-Type": "application/json" } })
-            ]);
-            if (formspree.ok) {
-              form.style.display = "none";
-              error.style.display = "none";
-              success.style.display = "block";
-              success.scrollIntoView({ behavior: "smooth", block: "center" });
-            } else { throw new Error(); }
-          } catch {
-            error.style.display = "block";
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send & Get My Free Quote';
-            error.scrollIntoView({ behavior: "smooth", block: "center" });
+            await fetch('https://www.truewebx.site/api/lead/submit', {
+              method: 'POST',
+              body: formPayload,
+              headers: { 'Accept': 'application/json' }
+            });
+          } catch (error) {
+            console.error("Error submitting to TrueWebX:", error);
           }
+
+          form.style.display = "none";
+          error.style.display = "none";
+          success.style.display = "block";
+          success.scrollIntoView({ behavior: "smooth", block: "center" });
         });
       })();
     </script>
