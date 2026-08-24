@@ -1200,6 +1200,125 @@
         document.getElementById("confirmationSection").classList.remove("hidden");
       });
     </script>
+    
+    <!-- 🌟 SCROLL POPUP MODAL (LeadConnector Form) -->
+    <div id="quotePopupModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center z-[99999] p-4 transition-opacity duration-300 opacity-0" onclick="closeQuotePopup(event)">
+      <div class="relative w-full max-w-2xl bg-gradient-to-b from-gray-900 via-slate-900 to-black border border-indigo-500/40 rounded-3xl shadow-[0_10px_50px_rgba(99,102,241,0.35)] p-5 sm:p-7 max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95" onclick="event.stopPropagation()">
+        
+        <!-- Close Button -->
+        <button onclick="closeQuotePopup()" class="absolute top-4 right-4 text-gray-400 hover:text-white bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold transition-all shadow-md cursor-pointer z-10" aria-label="Close modal">
+          &times;
+        </button>
+
+        <!-- Header -->
+        <div class="text-center mb-6 pr-8 sm:pr-0">
+          <span class="inline-block bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-blue-300 text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-inner">
+            ✦ Fast &amp; Free Quote ✦
+          </span>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Get Your <span class="bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">Free Quote</span>
+          </h3>
+          <p class="text-gray-300 text-sm mt-1 max-w-md mx-auto">
+            Fill out the form below and our team will get back to you in minutes!
+          </p>
+        </div>
+
+        <!-- LeadConnector Form Iframe -->
+        <div class="w-full rounded-2xl overflow-hidden bg-white/5 border border-white/10 p-2 min-h-[500px]">
+          <iframe
+              src="https://api.leadconnectorhq.com/widget/form/m3o0woPsEENXRbsLsiGM"
+              style="width:100%;height:100%;border:none;border-radius:8px"
+              id="popup-inline-m3o0woPsEENXRbsLsiGM" 
+              data-layout="{'id':'INLINE'}"
+              data-trigger-type="alwaysShow"
+              data-trigger-value=""
+              data-activation-type="alwaysActivated"
+              data-activation-value=""
+              data-deactivation-type="neverDeactivate"
+              data-deactivation-value=""
+              data-form-name="Website form"
+              data-height="1115"
+              data-layout-iframe-id="popup-inline-m3o0woPsEENXRbsLsiGM"
+              data-form-id="m3o0woPsEENXRbsLsiGM"
+              title="Website form"
+          >
+          </iframe>
+          <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      let quotePopupTriggered = false;
+
+      function openQuotePopup() {
+        const modal = document.getElementById('quotePopupModal');
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          modal.classList.remove('opacity-0');
+          modal.classList.add('opacity-100');
+          const inner = modal.querySelector('div');
+          if (inner) {
+            inner.classList.remove('scale-95');
+            inner.classList.add('scale-100');
+          }
+        }, 10);
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeQuotePopup(e) {
+        if (e && e.target && e.target.id !== 'quotePopupModal' && !e.target.closest('button[aria-label="Close modal"]')) {
+          return;
+        }
+        const modal = document.getElementById('quotePopupModal');
+        if (!modal) return;
+        modal.classList.remove('opacity-100');
+        modal.classList.add('opacity-0');
+        const inner = modal.querySelector('div');
+        if (inner) {
+          inner.classList.remove('scale-100');
+          inner.classList.add('scale-95');
+        }
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          document.body.style.overflow = '';
+        }, 300);
+      }
+
+      // Close on Escape key
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          const modal = document.getElementById('quotePopupModal');
+          if (modal && !modal.classList.contains('hidden')) {
+            closeQuotePopup();
+          }
+        }
+      });
+
+      // Trigger when scrolling past the hero section
+      (function () {
+        function checkScroll() {
+          if (quotePopupTriggered || sessionStorage.getItem('quotePopupDismissed')) return;
+
+          const hero = document.getElementById('home');
+          if (!hero) return;
+
+          const heroRect = hero.getBoundingClientRect();
+          // When user scrolls past the hero section
+          if (heroRect.bottom < 150) {
+            quotePopupTriggered = true;
+            sessionStorage.setItem('quotePopupDismissed', 'true');
+            openQuotePopup();
+            window.removeEventListener('scroll', checkScroll);
+          }
+        }
+
+        window.addEventListener('scroll', checkScroll, { passive: true });
+      })();
+    </script>
+
     <!-- Hero Section -->
     <section class="hero-image min-h-screen pt-24 pb-12 flex items-center justify-center relative" id="home">
       <!-- Light overlay for readability -->
@@ -1292,210 +1411,6 @@
             document.getElementById("quote").scrollIntoView({ behavior: "smooth" });
           }
         </script>
-
-
-
-        <!-- ✨ LET US CALL YOU — Hero Form -->
-        <div style="margin-top:32px;width:100%;max-width:600px;margin-left:auto;margin-right:auto;">
-          <div
-            style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);border-radius:24px;padding:30px 32px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 20px 60px rgba(0,0,0,0.35);">
-
-            <!-- Badge -->
-            <div style="text-align:center;margin-bottom:10px;">
-              <span
-                style="display:inline-block;background:rgba(96,165,250,0.15);border:1px solid rgba(96,165,250,0.3);color:#93c5fd;font-size:0.65rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding:5px 14px;border-radius:999px;">Free
-                &amp; No Commitment</span>
-            </div>
-
-            <!-- Title -->
-            <h3 style="text-align:center;font-size:1.4rem;font-weight:900;color:#fff;margin:0 0 6px;line-height:1.2;">
-              Let Us Call <span
-                style="background:linear-gradient(90deg,#667eea,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">You</span>
-            </h3>
-            <p style="text-align:center;font-size:0.82rem;color:rgba(255,255,255,0.5);margin:0 0 20px;">Drop your info
-              below and we'll reach out within minutes!</p>
-
-            <style>
-              .hf-wrap {
-                position: relative
-              }
-
-              .hf-ico {
-                position: absolute;
-                left: 13px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #60a5fa;
-                font-size: 0.8rem;
-                pointer-events: none
-              }
-
-              .hf-input {
-                width: 100%;
-                box-sizing: border-box;
-                background: rgba(255, 255, 255, 0.15);
-                border: 1px solid rgba(255, 255, 255, 0.25);
-                border-radius: 11px;
-                padding: 12px 14px 12px 38px;
-                color: #ffffff;
-                font-size: 0.87rem;
-                font-family: 'Poppins', sans-serif;
-                outline: none;
-                transition: border .2s, box-shadow .2s
-              }
-
-              .hf-input::placeholder {
-                color: rgba(255, 255, 255, 0.65)
-              }
-
-              .hf-input:focus {
-                border-color: #60a5fa;
-                box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2)
-              }
-
-              .hf-btn {
-                width: 100%;
-                padding: 14px;
-                border: none;
-                border-radius: 13px;
-                background: linear-gradient(90deg, #5b4fcf, #764ba2, #60a5fa);
-                background-size: 200% 100%;
-                color: #fff;
-                font-size: 1rem;
-                font-weight: 700;
-                font-family: 'Poppins', sans-serif;
-                cursor: pointer;
-                letter-spacing: 0.03em;
-                transition: background-position .5s, transform .2s, box-shadow .3s;
-                box-shadow: 0 5px 24px rgba(102, 126, 234, 0.5)
-              }
-
-              .hf-btn:hover {
-                background-position: 100% 0;
-                transform: translateY(-2px);
-                box-shadow: 0 10px 32px rgba(102, 126, 234, 0.65)
-              }
-            </style>
-
-            <form id="heroCallForm" autocomplete="off">
-
-              <!-- Row 1: First + Last -->
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-                <div class="hf-wrap">
-                  <span class="hf-ico"><i class="fas fa-user"></i></span>
-                  <input class="hf-input" type="text" name="first_name" placeholder="First Name" required />
-                </div>
-                <div class="hf-wrap">
-                  <span class="hf-ico"><i class="fas fa-user"></i></span>
-                  <input class="hf-input" type="text" name="last_name" placeholder="Last Name" required />
-                </div>
-              </div>
-
-              <!-- Row 2: Phone + Email -->
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-                <div class="hf-wrap">
-                  <span class="hf-ico"><i class="fas fa-phone-alt"></i></span>
-                  <input class="hf-input" type="tel" name="phone" placeholder="Phone Number" required
-                    pattern="[0-9+()\-\s]{7,20}" title="Please enter a valid phone number (digits only)" />
-                </div>
-                <div class="hf-wrap">
-                  <span class="hf-ico"><i class="fas fa-envelope"></i></span>
-                  <input class="hf-input" type="email" name="email" placeholder="Email Address" required />
-                </div>
-              </div>
-
-              <!-- Row 3: State + City -->
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-                <div class="hf-wrap">
-                  <span class="hf-ico"><i class="fas fa-map"></i></span>
-                  <input class="hf-input" type="text" name="state" placeholder="State" />
-                </div>
-                <div class="hf-wrap">
-                  <span class="hf-ico"><i class="fas fa-city"></i></span>
-                  <input class="hf-input" type="text" name="city" placeholder="City" />
-                </div>
-              </div>
-
-              <!-- Consent Checkboxes -->
-              <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
-                <label style="display:flex;align-items:flex-start;gap:9px;cursor:pointer;">
-                  <input type="checkbox" name="consent_nonmarketing"
-                    style="margin-top:3px;min-width:15px;width:15px;height:15px;accent-color:#60a5fa;flex-shrink:0;" />
-                  <span style="font-size:0.68rem;color:rgba(255,255,255,0.65);line-height:1.55;">I consent to Receive SMS Notifications, Alerts from <strong style="color:#fff;">Zoiris Cleaning Services</strong>. Message frequency varies. Message &amp; data rates may apply. Text HELP to <strong style="color:#fff;">+1 251-220-2515</strong> for assistance. You can reply STOP to unsubscribe at any time.</span>
-                </label>
-                <label style="display:flex;align-items:flex-start;gap:9px;cursor:pointer;">
-                  <input type="checkbox" name="consent_marketing"
-                    style="margin-top:3px;min-width:15px;width:15px;height:15px;accent-color:#60a5fa;flex-shrink:0;" />
-                  <span style="font-size:0.68rem;color:rgba(255,255,255,0.65);line-height:1.55;">By checking this box I agree to receive occasional marketing messages from <strong style="color:#fff;">Zoiris Cleaning Services</strong>.</span>
-                </label>
-              </div>
-
-
-              <!-- Submit -->
-              <button type="submit" class="hf-btn" id="heroCallBtn">
-                <i class="fas fa-phone-alt" style="margin-right:8px;"></i> Call Me &mdash; I'm Ready!
-              </button>
-
-            </form>
-
-            <!-- Success -->
-            <div id="heroCallSuccess"
-              style="display:none;margin-top:16px;text-align:center;padding:22px 18px;background:linear-gradient(135deg,rgba(52,211,153,0.12),rgba(16,185,129,0.08));border:1px solid rgba(52,211,153,0.3);border-radius:16px;">
-              <div style="font-size:2rem;margin-bottom:8px;">🎉</div>
-              <p style="font-size:1rem;font-weight:800;color:#6ee7b7;margin:0 0 6px;">Thank You — We'll Be Right With
-                You!</p>
-              <p style="font-size:0.78rem;color:rgba(255,255,255,0.65);margin:0 0 10px;line-height:1.5;">Your request
-                has been received. A member of our team will call you within <strong style="color:#6ee7b7;">15
-                  minutes</strong> during business hours.</p>
-              <p style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin:0;">Zoiris Cleaning Services &bull; (251)
-                930-8621</p>
-            </div>
-            <!-- Error -->
-            <div id="heroCallError"
-              style="display:none;margin-top:14px;text-align:center;padding:13px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:11px;color:#f87171;font-weight:600;font-size:0.87rem;">
-              <i class="fas fa-exclamation-circle" style="margin-right:6px;"></i> Something went wrong. Call <a
-                href="tel:2512202515" style="color:#f87171;">251-220-2515</a>.
-            </div>
-
-            <script>
-              (function () {
-                document.getElementById('heroCallForm').addEventListener('submit', async function (e) {
-                  e.preventDefault();
-                  var btn = document.getElementById('heroCallBtn');
-                  btn.disabled = true;
-                  btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i> Sending…';
-                  var data = new FormData(this);
-                  var formPayload = new URLSearchParams();
-                  formPayload.append('service_id', '15d55296-a241-494a-b6f8-d36fd4a36e39');
-                  formPayload.append('form_name', 'Zoiris Cleaning services');
-                  formPayload.append('firstName', data.get('first_name') || '');
-                  formPayload.append('lastName', data.get('last_name') || '');
-                  formPayload.append('phone', data.get('phone') || '');
-                  formPayload.append('email', data.get('email') || '');
-                  formPayload.append('complianceSMS', data.get('consent_nonmarketing') ? 'on' : 'off');
-                  formPayload.append('compliancePromo', data.get('consent_marketing') ? 'on' : 'off');
-                  if (data.get('state')) formPayload.append('state', data.get('state'));
-                  if (data.get('city')) formPayload.append('city', data.get('city'));
-                  
-                  try {
-                    await fetch('https://www.truewebx.site/api/lead/submit', {
-                      method: 'POST',
-                      body: formPayload,
-                      headers: { 'Accept': 'application/json' }
-                    });
-                  } catch (error) {
-                    console.error("Error submitting to TrueWebX:", error);
-                  }
-                  
-                  this.style.display = 'none';
-                  document.getElementById('heroCallSuccess').style.display = 'block';
-                });
-              })();
-            </script>
-
-          </div>
-        </div>
-        <!-- END Hero Form -->
 
       </div>
     </section>
@@ -2381,128 +2296,30 @@
           <!-- LEFT: Form (3/5 cols) -->
           <div class="lg:col-span-3">
             <div
-              style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.09);border-radius:24px;padding:34px 30px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 0 60px rgba(102,126,234,0.09);">
-              <form id="contactForm" autocomplete="off" style="display:grid;gap:14px;">
-
-                <!-- First + Last -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                  <div class="zcs-field">
-                    <input class="zcs-input" type="text" name="first_name" placeholder="First Name" required />
-                    <span class="zcs-label">First Name</span>
-                    <span class="zcs-icon"><i class="fas fa-user"></i></span>
-                  </div>
-                  <div class="zcs-field">
-                    <input class="zcs-input" type="text" name="last_name" placeholder="Last Name" required />
-                    <span class="zcs-label">Last Name</span>
-                    <span class="zcs-icon"><i class="fas fa-user-tag"></i></span>
-                  </div>
-                </div>
-
-                <!-- Phone + Email -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                  <div class="zcs-field">
-                    <input class="zcs-input" type="tel" name="phone" placeholder="Phone" required
-                      pattern="[0-9+()\-\s]{7,20}" title="Please enter a valid phone number (digits only)" />
-                    <span class="zcs-label">Phone Number</span>
-                    <span class="zcs-icon"><i class="fas fa-phone-alt"></i></span>
-                  </div>
-                  <div class="zcs-field">
-                    <input class="zcs-input" type="email" name="email" placeholder="Email" required />
-                    <span class="zcs-label">Email Address</span>
-                    <span class="zcs-icon"><i class="fas fa-envelope"></i></span>
-                  </div>
-                </div>
-
-                <!-- Address -->
-                <div class="zcs-field">
-                  <input class="zcs-input" type="text" name="address" placeholder="Address" />
-                  <span class="zcs-label">Street Address</span>
-                  <span class="zcs-icon"><i class="fas fa-map-marker-alt"></i></span>
-                </div>
-
-                <!-- State + City -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                  <div class="zcs-field">
-                    <input class="zcs-input" type="text" name="state" placeholder="State" />
-                    <span class="zcs-label">State</span>
-                    <span class="zcs-icon"><i class="fas fa-map"></i></span>
-                  </div>
-                  <div class="zcs-field">
-                    <input class="zcs-input" type="text" name="city" placeholder="City" />
-                    <span class="zcs-label">City</span>
-                    <span class="zcs-icon"><i class="fas fa-city"></i></span>
-                  </div>
-                </div>
-
-                <!-- Service Type -->
-                <div class="zcs-field">
-                  <span class="zcs-icon"><i class="fas fa-broom"></i></span>
-                  <select class="zcs-input" id="zcs_service" name="service_type" required
-                    onchange="this.classList.add('filled')">
-                    <option value="" disabled selected></option>
-                    <option value="Residential Cleaning">🏠 Residential Cleaning</option>
-                    <option value="Commercial Cleaning">🏢 Commercial Cleaning</option>
-                    <option value="Deep Cleaning">🧹 Deep Cleaning</option>
-                    <option value="Move In / Out">📦 Move In / Out Cleaning</option>
-                    <option value="Airbnb Cleaning">🛎️ Airbnb Cleaning</option>
-                    <option value="Post-Construction">🏗️ Post-Construction Cleanup</option>
-                    <option value="Office Cleaning">💼 Office Cleaning</option>
-                    <option value="Other">✨ Other</option>
-                  </select>
-                  <span class="zcs-label" id="zcs_service_lbl">Type of Service Needed</span>
-                </div>
-
-                <!-- Message -->
-                <div class="zcs-field">
-                  <textarea class="zcs-input" name="message" rows="3" placeholder="Message"></textarea>
-                  <span class="zcs-label" style="top:16px;">Message or Special Requests</span>
-                  <span class="zcs-icon" style="top:18px;transform:none;"><i class="fas fa-comment-alt"></i></span>
-                </div>
-
-                <!-- Consent -->
-                <div
-                  style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;">
-                  <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-                    <input type="checkbox" name="consent_nonmarketing"
-                      style="margin-top:3px;min-width:15px;width:15px;height:15px;accent-color:#60a5fa;" />
-                    <span style="font-size:0.71rem;color:rgba(255,255,255,0.7);line-height:1.5;">I consent to Receive SMS Notifications, Alerts from <strong style="color:#fff;">Zoiris Cleaning Services</strong>. Message frequency varies. Message &amp; data rates may apply. Text HELP to <strong style="color:#fff;">+1 251-220-2515</strong> for assistance. You can reply STOP to unsubscribe at any time.</span>
-                  </label>
-                  <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-                    <input type="checkbox" name="consent_marketing"
-                      style="margin-top:3px;min-width:15px;width:15px;height:15px;accent-color:#60a5fa;" />
-                    <span style="font-size:0.71rem;color:rgba(255,255,255,0.7);line-height:1.5;">By checking this box I agree to receive occasional marketing messages from <strong style="color:#fff;">Zoiris Cleaning Services</strong>.</span>
-                  </label>
-                </div>
-
-                <!-- Submit -->
-                <button type="submit" class="zcs-btn" id="zcsSubmitBtn">
-                  <i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send &amp; Get My Free Quote
-                </button>
-
-              </form>
-
-              <!-- Success / Error (outside form so they show after form.style.display='none') -->
-              <div id="formSuccess"
-                style="display:none;text-align:center;padding:26px 20px;background:linear-gradient(135deg,rgba(52,211,153,0.1),rgba(16,185,129,0.06));border:1px solid rgba(52,211,153,0.28);border-radius:16px;">
-                <div style="font-size:2.2rem;margin-bottom:10px;">✅</div>
-                <p style="font-size:1.05rem;font-weight:800;color:#6ee7b7;margin:0 0 8px;">Thank You for Reaching Out!
-                </p>
-                <p style="font-size:0.83rem;color:rgba(255,255,255,0.7);margin:0 0 6px;line-height:1.6;">We have
-                  received your request and one of our professional cleaning specialists will contact you within <strong
-                    style="color:#6ee7b7;">15 minutes</strong> during business hours.</p>
-                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin:0;">Zoiris Cleaning Services &bull; (251)
-                  930-8621 &bull; Shiloh, AL</p>
-              </div>
-              <div id="formError"
-                style="display:none;text-align:center;padding:15px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:12px;color:#f87171;font-weight:600;font-size:0.9rem;">
-                <i class="fas fa-exclamation-circle" style="margin-right:6px;"></i> Something went wrong. Call us at
-                251-220-2515.
-              </div>
-
+              style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.09);border-radius:24px;padding:20px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 0 60px rgba(102,126,234,0.09);">
+              <iframe
+                  src="https://api.leadconnectorhq.com/widget/form/m3o0woPsEENXRbsLsiGM"
+                  style="width:100%;height:100%;border:none;border-radius:3px"
+                  id="inline-m3o0woPsEENXRbsLsiGM" 
+                  data-layout="{'id':'INLINE'}"
+                  data-trigger-type="alwaysShow"
+                  data-trigger-value=""
+                  data-activation-type="alwaysActivated"
+                  data-activation-value=""
+                  data-deactivation-type="neverDeactivate"
+                  data-deactivation-value=""
+                  data-form-name="Website form"
+                  data-height="1115"
+                  data-layout-iframe-id="inline-m3o0woPsEENXRbsLsiGM"
+                  data-form-id="m3o0woPsEENXRbsLsiGM"
+                  title="Website form"
+                      >
+              </iframe>
+              <script src="https://link.msgsndr.com/js/form_embed.js"></script>
             </div>
           </div>
 
-          <!-- RIGHT: Contact Info + WhatsApp (2/5 cols) -->
+<!-- RIGHT: Contact Info + WhatsApp (2/5 cols) -->
           <div class="lg:col-span-2" style="display:flex;flex-direction:column;gap:18px;">
 
             <!-- Contact Card -->
@@ -2597,63 +2414,10 @@
         </div>
       </div>
 
-      <script>
-        document.getElementById('zcs_service').addEventListener('change', function () {
-          var lbl = document.getElementById('zcs_service_lbl');
-          if (this.value) {
-            lbl.style.top = '-10px'; lbl.style.left = '10px'; lbl.style.fontSize = '0.67rem';
-            lbl.style.color = '#93c5fd'; lbl.style.background = 'rgba(10,18,50,0.95)';
-            lbl.style.padding = '0 6px'; lbl.style.borderRadius = '4px';
-          }
-        });
-      </script>
+      
 
     </section>
-    <!-- FORM SUBMIT SCRIPT -->
-    <script>
-      (function () {
-        const form = document.getElementById("contactForm");
-        const success = document.getElementById("formSuccess");
-        const error = document.getElementById("formError");
-
-        form.addEventListener("submit", async function (e) {
-          e.preventDefault();
-          const btn = document.getElementById("zcsSubmitBtn");
-          btn.disabled = true;
-          btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i> Sending…';
-          var data = new FormData(form);
-          var formPayload = new URLSearchParams();
-          formPayload.append('service_id', '15d55296-a241-494a-b6f8-d36fd4a36e39');
-          formPayload.append('form_name', 'Zoiris Cleaning services');
-          formPayload.append('firstName', data.get('first_name') || '');
-          formPayload.append('lastName', data.get('last_name') || '');
-          formPayload.append('phone', data.get('phone') || '');
-          formPayload.append('email', data.get('email') || '');
-          formPayload.append('complianceSMS', data.get('consent_nonmarketing') ? 'on' : 'off');
-          formPayload.append('compliancePromo', data.get('consent_marketing') ? 'on' : 'off');
-          if (data.get('address')) formPayload.append('address', data.get('address'));
-          if (data.get('city')) formPayload.append('city', data.get('city'));
-          if (data.get('state')) formPayload.append('state', data.get('state'));
-          if (data.get('service_type')) formPayload.append('service_type', data.get('service_type'));
-          if (data.get('message')) formPayload.append('message', data.get('message'));
-
-          try {
-            await fetch('https://www.truewebx.site/api/lead/submit', {
-              method: 'POST',
-              body: formPayload,
-              headers: { 'Accept': 'application/json' }
-            });
-          } catch (error) {
-            console.error("Error submitting to TrueWebX:", error);
-          }
-
-          form.style.display = "none";
-          error.style.display = "none";
-          success.style.display = "block";
-          success.scrollIntoView({ behavior: "smooth", block: "center" });
-        });
-      })();
-    </script>
+    
 
     <!-- Cleaning Services Preview -->
     <section class="py-16 bg-gray-5" id="services-preview">
